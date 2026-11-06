@@ -54,7 +54,14 @@ function FileManagerMenu:init()
 
     self:registerKeyEvents()
 
-    self.activation_menu = G_reader_settings:readSetting("activate_menu") or "swipe_tap"
+    self.activation_menu = G_reader_settings:readSetting("activate_menu")
+    if self.activation_menu == nil then
+        if os.getenv("KO_IOS") == "1" then
+            self.activation_menu = "tap"
+        else
+            self.activation_menu = "swipe_tap"
+        end
+    end
 end
 
 function FileManagerMenu:registerKeyEvents()
@@ -1116,9 +1123,11 @@ end
 
 function FileManagerMenu:onSetDimensions(dimen)
     -- This widget doesn't support in-place layout updates, so, close & reopen
-    if self.menu_container then
+    if self.menu_container and not self._rebuilding_menu then
+        self._rebuilding_menu = true
         self:onCloseFileManagerMenu()
         self:onShowMenu()
+        self._rebuilding_menu = false
     end
 
     -- update gesture zones according to new screen dimen
