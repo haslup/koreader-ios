@@ -25,9 +25,17 @@ IOS_BUNDLE_ID ?= rocks.koreader.ios
 # `git describe` output (v2026.03-70-gabc123_2026-04-27) is not, and iOS
 # rejects the bundle at install time. Split the describe into the tag and
 # the commits-ahead count: v2026.03-70-g... -> 2026.03.70 / build 70.
+# With no tags (fresh clone of this fork) `git describe` is empty; fall back
+# to 0.0.<commit count> so the plist still holds a valid dotted-numeric string.
 KO_VER_PARTS := $(subst -, ,$(patsubst v%,%,$(VERSION)))
+ifeq ($(strip $(KO_VER_PARTS)),)
+IOS_COMMIT_COUNT := $(shell git rev-list --count HEAD 2>/dev/null || echo 0)
+IOS_SHORT_VERSION := 0.0.$(IOS_COMMIT_COUNT)
+IOS_BUNDLE_VERSION := $(IOS_COMMIT_COUNT)
+else
 IOS_SHORT_VERSION := $(word 1,$(KO_VER_PARTS)).$(or $(word 2,$(KO_VER_PARTS)),0)
 IOS_BUNDLE_VERSION := $(or $(word 2,$(KO_VER_PARTS)),0)
+endif
 
 # platform/ios/Info.plist is gitignored and generated. project.yml points
 # INFOPLIST_FILE at it, so it must exist before xcodegen runs -- a fresh
