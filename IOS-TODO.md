@@ -8,6 +8,14 @@ Running list for the `local-build` branch. Tick items off in the same commit as 
   Fix idea: when `KO_IOS == "1"`, use `os.rename` for move/rename, with a copy-then-delete fallback for moves across file providers (cloud folders added with `iosfilepicker`), and a Lua read/write loop for copy (walking directories with `lfs` for recursive copy).
 - [ ] **Audit other uses of `ffiUtil.execute`, `os.execute` and `io.popen`** in frontend and bundled plugins. Each fails on iOS the same way. Hide, stub or rewrite them in Lua.
 
+- [ ] **The iOS keyboard always auto-capitalizes and autocorrects,** which is wrong for usernames, passwords and URLs. `S.startTextInput` (`base/ffi/SDL3.lua:195`) calls plain `SDL_StartTextInput`, so iOS uses its defaults: capitalize sentences, autocorrect on.
+  Fix idea: switch to `SDL_StartTextInputWithProperties` with `SDL_PROP_TEXTINPUT_CAPITALIZATION_NUMBER = SDL_CAPITALIZE_NONE` and `SDL_PROP_TEXTINPUT_AUTOCORRECT_BOOLEAN = false` by default. Better still, pass a type hint from `InputText` (`frontend/ui/widget/inputtext.lua`, `Device:startTextInput()` calls) so password fields get `SDL_TEXTINPUT_TYPE_TEXT_PASSWORD_HIDDEN`, and URL and username fields get their own types; prose fields such as notes could keep smart capitalization. Needs the properties API declared in `base/ffi/SDL3_h.lua`.
+
+## Updating to current upstream
+
+- [ ] The port is about 7 months behind. Frontend: forked from upstream `240f591d3` (2026-04-24), and upstream master is 558 commits ahead (checked 2026-11-13; latest release v2026.07.2). Base: forked from `656dbec1` (2026-04-23), and the base commit upstream master pins (`f64c3eb1`) is 369 commits ahead.
+- [ ] Make updating repeatable: keep the iOS changes as a short patch series on each repo and rebase it onto upstream (or onto a release tag), with a script that does the fetch, rebase, submodule pointer update and build.
+
 ## Third-party plugins
 
 - [ ] **Bookshelf (AndyHazz/bookshelf.koplugin, v6.4.2):** its in-app updater (`lib/bookshelf_updater.lua`, `os.execute`) won't work. For now, update it by hand by replacing `Documents/plugins/bookshelf.koplugin`.
