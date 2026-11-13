@@ -22,6 +22,11 @@ local function getDir(isUser)
     elseif Device:isPocketBook() then
         return isUser and "/mnt/ext1/system/fonts"
                        or "/ebrmain/adobefonts;/ebrmain/fonts"
+    elseif os.getenv("KO_IOS") == "1" then
+        -- iOS: the app bundle (and its fonts/) is read-only, so user fonts go
+        -- in the app's Documents/fonts, reachable from the Files app.
+        -- iOS system fonts aren't usable, so there's no system dir.
+        return isUser and home .. "/fonts" or nil
     elseif Device:isRemarkable() then
         return isUser and LINUX_FONT_PATH
                        or LINUX_SYS_FONT_PATH

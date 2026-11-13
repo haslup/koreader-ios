@@ -198,6 +198,9 @@ function iOS:init()
     local home = os.getenv("KO_HOME")
     if home and home ~= "" then
         self.home_dir = home
+        -- User font folder (see ui/elements/font_settings.lua); create it so
+        -- it shows up in the Files app, ready for .ttf/.otf files.
+        require("libs/libkoreader-lfs").mkdir(home .. "/fonts")
     end
     -- iOS UIWindow is always fullscreen; a persisted `sdl_window` size
     -- from a prior run (points, not pixels) makes SDL_CreateWindow

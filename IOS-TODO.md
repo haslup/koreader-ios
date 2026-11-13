@@ -31,7 +31,7 @@ Running list for the `local-build` branch. Tick items off in the same commit as 
 
 - [x] Applied the `SDL_EVENT_FINGER_CANCELED` handling from `hezi/koreader-base-ios#1`, the base companion to PR #12 (base `3b2d631c`). Skipped from that PR: the home-indicator hint (already set in `ios_loader.m`), the HiDPI framebuffer change (not needed on iPad; try it if iPhone renders blurry), and the libarchive zstd switch (not needed so far).
 - [ ] Release (non-Debug) builds fail (open issue on hezi/koreader-ios).
-- [ ] Custom fonts (open issue on hezi/koreader-ios).
+- [x] Custom fonts (open issue on hezi/koreader-ios): `.ttf`/`.otf` files in the app's `Documents/fonts` (Files app: On My iPad → KOReader → fonts) are now scanned. Restart KOReader after adding fonts.
 - [ ] No button to hide the on-screen keyboard (open issue on hezi/koreader-ios).
 
 ## Build and signing
