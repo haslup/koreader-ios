@@ -10,7 +10,9 @@ Running list for the `local-build` branch. Tick items off in the same commit as 
 
 ## Third-party plugins
 
-- [ ] **Bookshelf (AndyHazz/bookshelf.koplugin, v6.4.2):** its in-app updater (`lib/bookshelf_updater.lua`, `os.execute`) and Hardcover integration (`lib/bookshelf_hardcover.lua`, `io.popen`) won't work. Its HTTP helper's `curl` fallback (`lib/bookshelf_http.lua`) won't either, though the LuaSocket path should. For now, update it by hand by replacing `Documents/plugins/bookshelf.koplugin`.
+- [ ] **Bookshelf (AndyHazz/bookshelf.koplugin, v6.4.2):** its in-app updater (`lib/bookshelf_updater.lua`, `os.execute`) won't work. For now, update it by hand by replacing `Documents/plugins/bookshelf.koplugin`.
+  - Hardcover's `io.popen` (`lib/bookshelf_hardcover.lua:443-455`) runs `unzip` to read an EPUB's OPF for identifiers. That's not a `curl` call. It could use base's in-process `ffi/archiver` instead, with no native code needed.
+  - `lib/bookshelf_http.lua` only falls back to `curl` when LuaSocket/LuaSec fails, so that fallback may never be reached on iOS. Check before building a native HTTP bridge for it.
 
 ## Open from the fork / upstream
 
@@ -28,4 +30,4 @@ Running list for the `local-build` branch. Tick items off in the same commit as 
 
 - Terminal and SSH plugins can't work (they need `fork()`).
 - PDF reflow (libk2pdfopt) is disabled in the fork.
-- Free Apple ID signing expires after 7 days. A paid developer account gives a year and allows an iCloud container.
+- Signed with a paid developer account (1-year profiles), so an iCloud container entitlement is available if wanted.
