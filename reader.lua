@@ -36,6 +36,14 @@ G_defaults = require("luadefaults"):open()
 -- Has to be done before requiring other files because
 -- they might call gettext on load
 local DataStorage = require("datastorage")
+-- iOS: the data container's path can change between installs; fix the
+-- absolute paths stored in settings before anything reads them.
+if os.getenv("KO_IOS") == "1" then
+    local ok, err = pcall(function()
+        require("device/sdl/ios_container").migrate(DataStorage:getDataDir())
+    end)
+    if not ok then io.write("[ios container] migration failed: ", tostring(err), "\n") end
+end
 G_reader_settings = require("luasettings"):open(
     DataStorage:getDataDir().."/settings.reader.lua")
 
