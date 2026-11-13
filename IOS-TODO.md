@@ -36,7 +36,7 @@ Running list for the `local-build` branch. Tick items off in the same commit as 
 
 ## Build and signing
 
-- [ ] Change bundle id `rocks.koreader.ios` to one unique to the team (`platform/ios/project.yml` or `IOS_BUNDLE_ID`) so it doesn't need changing in Xcode after every `make TARGET=ios xcodeproj`.
+- [x] Team and bundle id now come from `platform/ios/local.config` (git-ignored), so `make TARGET=ios xcodeproj` keeps them. `platform/ios/deploy.sh` builds, signs, installs and launches on a connected device in one command.
 - [x] Fixed by rebasing onto the v2026.07.2 tag: the version is now `v2026.07.2-<n>-g<hash>`. Old problem: the build had no release tag, so KOReader reported no version: `git-rev` is a bare hash and the app version falls back to `0.0.<commit count>`. Plugins that gate on the KOReader version see "unknown". Consider a fake tag such as `v2026.04-ios`.
 
 ## Known limits (probably won't fix)

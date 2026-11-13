@@ -81,7 +81,7 @@ packages.
 ## Build
 
 ```sh
-git clone --recurse-submodules https://github.com/hezi/koreader-ios.git
+git clone --recurse-submodules https://github.com/haslup/koreader-ios.git
 cd koreader-ios
 make TARGET=ios xcodeproj
 open KOReader.xcodeproj
@@ -99,6 +99,33 @@ In Xcode:
 The first launch on the device will require trusting your developer
 profile in **Settings → General → VPN & Device Management** on the
 phone.
+
+To keep your team and bundle id when the project is regenerated, put them
+in `platform/ios/local.config` (git-ignored) instead of setting them in
+Xcode:
+
+```sh
+cp platform/ios/local.config.example platform/ios/local.config
+# edit: IOS_TEAM_ID = <your 10-character team ID>
+#       IOS_BUNDLE_ID = <a bundle id unique to your team>
+```
+
+## Build, install and launch from the command line
+
+With `platform/ios/local.config` filled in, Xcode signed in to that team's
+Apple account, and the device connected (USB, or Wi-Fi once paired):
+
+```sh
+platform/ios/deploy.sh            # build, sign, install, launch
+platform/ios/deploy.sh --console  # same, then stream KOReader's log
+platform/ios/deploy.sh --help     # other options (--device, --release, ...)
+```
+
+It regenerates `KOReader.xcodeproj` when needed, refreshes the version
+string, builds with automatic signing (`-allowProvisioningUpdates`, so
+profiles are created and renewed for you), installs with
+`xcrun devicectl` and launches the app. The device needs Developer Mode
+on and must be unlocked for the launch. Logs go to `build-logs/`.
 
 ## Headless / CI build
 

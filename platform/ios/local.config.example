@@ -1,0 +1,14 @@
+# Copy to platform/ios/local.config (git-ignored) and fill in.
+# Read by make (make/ios.mk) and by platform/ios/deploy.sh.
+# Format: KEY = value, one per line, no quotes.
+
+# Apple developer team ID (10 characters). Find it in Xcode > Settings >
+# Apple Accounts, or at https://developer.apple.com/account under Membership.
+IOS_TEAM_ID =
+
+# Bundle identifier, unique to your team (e.g. com.example.koreader).
+IOS_BUNDLE_ID = rocks.koreader.ios
+
+# Optional: device for deploy.sh, by name or UDID (xcrun devicectl list devices).
+# Without it, deploy.sh uses the only connected iPhone/iPad.
+# IOS_DEVICE =
